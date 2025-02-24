@@ -6,11 +6,15 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:48:57 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/24 18:28:59 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:35:14 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	parser(int argc, char **argv)
+#include "philo.h"
+
+int	parser(const t_args args)
 {
-	get_unsigned_int_arg()
+	unsigned int value;
+	get_int_arg(args, 1, &value);
+	
 }

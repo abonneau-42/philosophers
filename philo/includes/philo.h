@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/24 18:26:14 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:26:06 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ typedef enum e_parse_error
 	PARAMS_NOT_VALID,
 	PARAMS_NOT_PRESENT
 }	t_parse_error;
+
+typedef struct e_args
+{
+	int		argc;
+	char	**argv;
+}	t_args;
 
 long	ft_atol(const char *nptr);
 int		is_number(char *str);

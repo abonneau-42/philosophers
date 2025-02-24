@@ -6,11 +6,13 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:03 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/24 16:49:31 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:29:28 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philo.h"
+
 int	main(int argc, char **argv)
 {
-	
+	parser((t_args){argc, argv});
 }
