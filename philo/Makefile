@@ -16,6 +16,7 @@ SRCS_FILES = 	main.c \
 				parser/parser.c \
 				initialiser/initialiser.c \
 				resolver/resolver.c \
+				free/free_list.c \
 
 SRCS = $(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS = $(patsubst $(SRCS_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
