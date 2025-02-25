@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 17:57:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/24 18:25:40 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:31:24 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ long	ft_atol(const char *nptr)
 	return (result * sign);
 }
 
-int	is_number(char *str)
+int	is_number(const char *str)
 {
 	int	i;
 
@@ -69,28 +69,28 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int	is_int(char *chr, int *number)
+int	is_int(const char *chr, void *number)
 {
 	long	value;
 
-	if (!is_number(chr) || ft_strlen(chr) > 11)
+	if (!*chr || !is_number(chr) || ft_strlen(chr) > 11)
 		return (0);
 	value = ft_atol(chr);
 	if (value < INT_MIN || value > INT_MAX)
 		return (0);
-	number = (int)value;
+	*(int *)number = (int)value;
 	return (1);
 }
 
-int	is_unsigned_int(char *chr, int *number)
+int	is_unsigned_int(const char *chr, void *number)
 {
 	long	value;
 
-	if (!is_number(chr) || ft_strlen(chr) > 11)
+	if (!*chr || !is_number(chr) || ft_strlen(chr) > 11)
 		return (0);
 	value = ft_atol(chr);
 	if (value < 0 || value > UINT_MAX)
 		return (0);
-	number = (int)value;
+	*(unsigned int *)number = (unsigned int)value;
 	return (1);
 }

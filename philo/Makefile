@@ -10,6 +10,12 @@ INCLUDES_FILES = $(addprefix $(INCLUDES_DIR)/, $(HEADER))
 
 SRCS_DIR = srcs
 SRCS_FILES = 	main.c \
+				utils/utils.c \
+				utils/get_arg.c \
+				utils/lstadd_bidir.c \
+				parser/parser.c \
+				initialiser/initialiser.c \
+				resolver/resolver.c \
 
 SRCS = $(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS = $(patsubst $(SRCS_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
