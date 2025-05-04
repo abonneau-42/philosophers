@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"cstdlib": "c",
+		"philo.h": "c",
+		"utility": "c"
+	}
+}

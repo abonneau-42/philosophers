@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/25 20:21:25 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/05/04 19:07:18 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,22 @@ typedef struct s_routine_args
 {
 	t_node			*philo_node;
 	t_philo_args	*philo_args;
+	pthread_mutex_t	*death_mutex;
+	t_bool			*is_simulation_over;
+	pthread_mutex_t	*all_philo_is_ready;
 }	t_routine_args;
+
+typedef enum e_action
+{
+	THINKING,
+	EATING,
+	SLEEPING,
+	TAKEN_FORK,
+	DIED
+}	t_action;
+
+typedef unsigned int t_uint;
+
 
 t_parse_error	get_arg(const t_args args, int param_number, t_get_args_entry entry);
 void			get_args(const t_args args, t_get_args_entry *entries, int entries_count);
@@ -112,4 +127,14 @@ int is_unsigned_int(const char *chr, void *number);
 
 void	lstadd_bidir_front(t_node **node_list, void *content);
 void	lstadd_bidir_back(t_node **node_list, void *content);
+
+void	*watchdog(void *arg);
+void	*routine(void *arg);
+t_bool	init_philo(t_routine_args args);
+t_bool	init_mutex(t_node **node);
+t_bool	init_death_mutex(pthread_mutex_t *death_mutex);
+t_bool	init_watcher_thread(pthread_t *watchdog_thread, t_routine_args args);
+t_bool	init_all_philo_is_ready_mutex(pthread_mutex_t *all_philo_is_ready);
+
+void	print_action(t_action action, t_philo *philo);
 #endif
