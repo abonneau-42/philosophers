@@ -34,11 +34,17 @@ void *routine(void *arg)
     }
 
     t_philo *philo = (t_philo *)args->philo_node->content;
-	gettimeofday(&tv, NULL);
-	philo->last_time_eaten = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-    printf("Routine du philosophe %u\n", philo->id);
 
-	philo
+
+	pthread_mutex_t *left_fork = &((t_fork *)((args->philo_node->prev)->content))->mutex;
+	pthread_mutex_t *right_fork = &((t_fork *)((args->philo_node->next)->content))->mutex;
+
+    printf("Routine du philosophe %u\n", philo->id);
+	philo->is_ready = TRUE;
+	pthread_mutex_unlock(args->all_philo_is_ready);
+	usleep(10 * philo->id);
+	gettimeofday(&tv, NULL);
+	philo->last_time_eaten = (tv.tv_sec * 1000000 + tv.tv_usec);
 	pthread_mutex_lock(args->all_philo_is_ready);
 
 	// Verrouiller le mutex avant de modifier la variable partagée
@@ -46,32 +52,42 @@ void *routine(void *arg)
 	{
 		print_action(THINKING, philo);
 
-		pthread_mutex_lock(&((t_fork *)((args->philo_node->prev)->content))->mutex);
-		print_action(TAKEN_FORK, philo);
-		pthread_mutex_lock(&((t_fork *)((args->philo_node->next)->content))->mutex);
-		print_action(TAKEN_FORK, philo);
+		if (philo->id % 2 == 0) {
+			pthread_mutex_lock(left_fork);
+			pthread_mutex_lock(right_fork);
+			print_action(TAKEN_FORK, philo);
+		} else {
+			pthread_mutex_lock(right_fork);
+			pthread_mutex_lock(left_fork);
+			print_action(TAKEN_FORK, philo);
+		}
 
 		if (is_simulation_over_in_mutex(args))
         	break ;
-
-		print_action(EATING, philo);
-		//printf("%i\n", args->philo_args->time_to_eat);
-		
-		usleep(5000);
+		//printf("Philosophe %u mange\n", philo->id);
+		usleep(args->philo_args->time_to_eat);
 		gettimeofday(&tv, NULL);
-		philo->last_time_eaten = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+		philo->last_time_eaten = tv.tv_sec * 1000000 + tv.tv_usec;
+		philo->number_of_times_eaten++;
+		print_action(EATING, philo);
 
-		pthread_mutex_unlock(&((t_fork *)((args->philo_node->next)->content))->mutex);
-		pthread_mutex_unlock(&((t_fork *)((args->philo_node->prev)->content))->mutex);
+		if (philo->id % 2 == 0) {
+			pthread_mutex_unlock(right_fork);
+			pthread_mutex_unlock(left_fork);
+			print_action(PUT_FORK_BACK, philo);
+		} else {
+			pthread_mutex_unlock(left_fork);
+			pthread_mutex_unlock(right_fork);
+			print_action(PUT_FORK_BACK, philo);
+		}
 
 		if (is_simulation_over(args))
         	break ;
 
-		print_action(SLEEPING, philo);
         usleep(args->philo_args->time_to_sleep);
+		print_action(SLEEPING, philo);
 	}
 	
-
 	free(args);
     return NULL;
 }

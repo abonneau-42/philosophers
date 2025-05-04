@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/04 19:07:18 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/05/04 22:18:30 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdio.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+typedef unsigned int t_uint;
 
 typedef enum e_parse_error
 {
@@ -79,7 +81,9 @@ typedef struct s_node
 typedef struct s_philo
 {
 	unsigned int	id;
-	unsigned int	last_time_eaten;
+	size_t			last_time_eaten;
+	t_bool 			is_ready;
+	t_uint			number_of_times_eaten;
 	pthread_t		thread;
 }	t_philo;
 
@@ -105,10 +109,10 @@ typedef enum e_action
 	EATING,
 	SLEEPING,
 	TAKEN_FORK,
+	PUT_FORK_BACK,
 	DIED
 }	t_action;
 
-typedef unsigned int t_uint;
 
 
 t_parse_error	get_arg(const t_args args, int param_number, t_get_args_entry entry);
