@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/04 22:18:30 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/05/24 21:00:26 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,28 @@ typedef struct s_node
 	void			*content;
 }	t_node;
 
+typedef struct s_common_data
+{
+	t_philo_args	*args;
+	pthread_mutex_t	death_mutex;
+	pthread_mutex_t	all_philo_is_ready;
+	t_bool			philo_is_dead;
+}	t_common_data;
+
 typedef struct s_philo
 {
-	unsigned int	id;
+	t_uint			id;
 	size_t			last_time_eaten;
 	t_bool 			is_ready;
 	t_uint			number_of_times_eaten;
 	pthread_t		thread;
+	t_common_data	*data;
 }	t_philo;
 
 typedef struct s_fork
 {
-	unsigned int	id;
-	t_bool			is_taken;
+	t_uint			id;
+	t_bool			is_available;
 	pthread_mutex_t	mutex;
 }	t_fork;
 
@@ -101,18 +110,31 @@ typedef struct s_routine_args
 	pthread_mutex_t	*death_mutex;
 	t_bool			*is_simulation_over;
 	pthread_mutex_t	*all_philo_is_ready;
+	pthread_mutex_t *print_mutex;
 }	t_routine_args;
 
-typedef enum e_action
+typedef struct s_data
 {
-	THINKING,
-	EATING,
-	SLEEPING,
-	TAKEN_FORK,
-	PUT_FORK_BACK,
-	DIED
-}	t_action;
+	t_common_data	*common_data;
+	t_node			*node_list;
+}	t_data
 
+
+# define  TAKEN_FORK " has taken a fork\n"
+# define  EATING " is eating\n"
+# define  SLEEPING " is sleeping\n"
+# define  THINKING " is thinking\n"
+# define  PUT_FORK_BACK " put fork back\n"
+# define  DIED " died\n"
+
+typedef enum e_state
+{
+	dead,
+	eating,
+	sleeping,
+	thinking,
+	taking
+}	t_state;
 
 
 t_parse_error	get_arg(const t_args args, int param_number, t_get_args_entry entry);
@@ -134,11 +156,32 @@ void	lstadd_bidir_back(t_node **node_list, void *content);
 
 void	*watchdog(void *arg);
 void	*routine(void *arg);
-t_bool	init_philo(t_routine_args args);
-t_bool	init_mutex(t_node **node);
-t_bool	init_death_mutex(pthread_mutex_t *death_mutex);
+//t_bool	init_philo(t_routine_args args);
+//t_bool	init_mutex(t_node **node);
+//t_bool	init_death_mutex(pthread_mutex_t *death_mutex);
 t_bool	init_watcher_thread(pthread_t *watchdog_thread, t_routine_args args);
-t_bool	init_all_philo_is_ready_mutex(pthread_mutex_t *all_philo_is_ready);
+//t_bool	init_all_philo_is_ready_mutex(pthread_mutex_t *all_philo_is_ready);
 
-void	print_action(t_action action, t_philo *philo);
+//t_bool init_print_mutex(pthread_mutex_t *print_mutex);
+
+void	print_action(t_state state, t_philo *philo);
+t_bool	fk_take(t_philo *philo, t_fork *fork, pthread_mutex_t *print_mutex);
+void	fk_put(t_fork *fork);
+
+t_bool	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork, pthread_mutex_t *print_mutex);
+
+
+__uint64_t get_time(void);
+
+
+void	*manager(void *arg);
+
+
+
+
+
+
+
+
+
 #endif

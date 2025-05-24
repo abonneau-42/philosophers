@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 17:38:58 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/04 20:33:04 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/05/24 19:25:18 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int	initialiser(t_philo_args *philo_args, t_node **node_list)
 		philo = malloc(sizeof(t_philo));
 		if (!philo)
 			return (0);
-		*philo = (t_philo){.id = i, .last_time_eaten = 0, .is_ready = FALSE, .number_of_times_eaten = 0};
+		*philo = (t_philo){.id = i, .last_time_eaten = 0, .is_ready = FALSE, .number_of_times_eaten = 0, .data = philo_args};
 		fork = malloc(sizeof(t_fork));
 		if (!fork)
 			return (0);
-		*fork = (t_fork){.id = i, .is_taken = FALSE};
+		*fork = (t_fork){.id = i, .is_available = FALSE};
 		lstadd_bidir_back(node_list, philo);
 		lstadd_bidir_back(node_list, fork);
 	}

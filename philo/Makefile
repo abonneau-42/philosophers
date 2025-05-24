@@ -19,6 +19,8 @@ SRCS_FILES = 	main.c \
 				resolver/print_action.c \
 				resolver/init.c \
 				resolver/philo_routine.c \
+				resolver/fork/fk_actions.c \
+				resolver/philo/ph_take_forks.c \
 				free/free_list.c \
 
 SRCS = $(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
