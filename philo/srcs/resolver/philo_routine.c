@@ -22,86 +22,35 @@ t_bool is_simulation_over_in_mutex(t_routine_args *args)
     return result;
 }
 
-void *routine(void *arg)
+void	routine(void *arg)
 {
-	struct timeval tv;
-	
-	t_routine_args *args = (t_routine_args *)arg;
-
-    if (!args->philo_node || !args->philo_node->content) {
-        printf("Erreur : philo_node ou son contenu est NULL\n");
-        return NULL;
-    }
-
-    t_philo *philo = (t_philo *)args->philo_node->content;
-
-	pthread_mutex_t *l_fork = &((t_fork *)((args->philo_node->prev)->content))->mutex;
-	pthread_mutex_t *r_fork = &((t_fork *)((args->philo_node->next)->content))->mutex;
+	const t_node *node = (t_node *)arg;
+	t_fork *l_fork = ((t_fork *)((node->prev)->content));
+	t_fork *r_fork = ((t_fork *)((node->next)->content));
+    t_philo *philo = (t_philo *)node->content;
 
     printf("Routine du philosophe %u\n", philo->id);
 	philo->is_ready = TRUE;
-	pthread_mutex_unlock(args->all_philo_is_ready);
-	usleep(10 * philo->id);
-	gettimeofday(&tv, NULL);
-	philo->last_time_eaten = (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	pthread_mutex_lock(args->all_philo_is_ready);
+	pthread_mutex_lock(&philo->data->all_philo_is_ready);
+	pthread_mutex_unlock(&philo->data->all_philo_is_ready);
+	philo->last_time_eaten = get_time();
+	if (philo->id % 2)
+		ph_sleep(philo->data->args->time_to_eat / 2, philo);
 
 	// Verrouiller le mutex avant de modifier la variable partagée
-	while (!is_simulation_over(args))
+	while (!ph_is_dead(philo) && !ph_get_dead(philo->data))
 	{
-		ph_take_forks(philo, l_fork, r_fork, args->print_mutex);
+		ph_take_forks(philo, l_fork, r_fork);
 		print_action(eating, philo);
-
+		ph_sleep(philo->data->args->time_to_eat, philo);
+		ph_inc_meal_count(philo);
 		fk_put(l_fork);
 		fk_put(r_fork);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		//print_action(THINKING, philo, args->print_mutex);
-
-
-		//if (is_simulation_over_in_mutex(args))
-        //	break ;
-		////printf("Philosophe %u mange\n", philo->id);
-		//usleep(args->philo_args->time_to_eat);
-		//gettimeofday(&tv, NULL);
-		//philo->last_time_eaten = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-		//philo->number_of_times_eaten++;
-		//print_action(EATING, philo, args->print_mutex);
-
-		//if (philo->id % 2 == 0) {
-		//	pthread_mutex_unlock(right_fork);
-		//	pthread_mutex_unlock(left_fork);
-		//	print_action(PUT_FORK_BACK, philo, args->print_mutex);
-		//} else {
-		//	pthread_mutex_unlock(left_fork);
-		//	pthread_mutex_unlock(right_fork);
-		//	print_action(PUT_FORK_BACK, philo, args->print_mutex);
-		//}
-
-		//if (is_simulation_over(args))
-        //	break ;
-
-        //usleep(args->philo_args->time_to_sleep);
-		//print_action(SLEEPING, philo, args->print_mutex);
+		print_action(sleeping, philo);
+		ph_sleep(philo->data->args->time_to_sleep, philo);
+		print_action(thinking, philo);
+		usleep(100); // Petite pause pour éviter une boucle trop rapide
 	}
-	
-	free(args);
-    return NULL;
+	fk_put(l_fork);
+	fk_put(r_fork);
 }

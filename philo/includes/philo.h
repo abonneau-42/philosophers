@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/24 21:00:26 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/05/25 20:01:17 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_philo
 	size_t			last_time_eaten;
 	t_bool 			is_ready;
 	t_uint			number_of_times_eaten;
+	pthread_mutex_t	mtx_eat;
 	pthread_t		thread;
 	t_common_data	*data;
 }	t_philo;
@@ -117,7 +118,7 @@ typedef struct s_data
 {
 	t_common_data	*common_data;
 	t_node			*node_list;
-}	t_data
+}	t_data;
 
 
 # define  TAKEN_FORK " has taken a fork\n"
@@ -155,7 +156,7 @@ void	lstadd_bidir_front(t_node **node_list, void *content);
 void	lstadd_bidir_back(t_node **node_list, void *content);
 
 void	*watchdog(void *arg);
-void	*routine(void *arg);
+void	routine(void *arg);
 //t_bool	init_philo(t_routine_args args);
 //t_bool	init_mutex(t_node **node);
 //t_bool	init_death_mutex(pthread_mutex_t *death_mutex);
@@ -165,10 +166,10 @@ t_bool	init_watcher_thread(pthread_t *watchdog_thread, t_routine_args args);
 //t_bool init_print_mutex(pthread_mutex_t *print_mutex);
 
 void	print_action(t_state state, t_philo *philo);
-t_bool	fk_take(t_philo *philo, t_fork *fork, pthread_mutex_t *print_mutex);
+t_bool	fk_take(t_philo *philo, t_fork *fork);
 void	fk_put(t_fork *fork);
 
-t_bool	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork, pthread_mutex_t *print_mutex);
+t_bool	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork);
 
 
 __uint64_t get_time(void);
@@ -176,7 +177,14 @@ __uint64_t get_time(void);
 
 void	*manager(void *arg);
 
+void	ph_sleep(__uint64_t duration, t_philo *philo);
 
+void	ph_inc_meal_count(t_philo *philo);
+
+t_bool	ph_get_dead(t_common_data *data);
+t_bool	ph_is_dead(t_philo *philo);
+
+void	ph_stop_all(t_common_data *data);
 
 
 

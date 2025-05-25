@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/24 21:03:00 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:33:21 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,6 @@ void	*ft_bzero(void *s, size_t n)
 //	return (ptr);
 //}
 
-void	wait_all_philo_is_ready(t_routine_args *args)
-{
-	t_uint	i;
-	t_philo	*philo;
-
-	i = 0;
-	pthread_mutex_lock(args->all_philo_is_ready);
-	while (i < args->philo_args->number_of_philosophers)
-	{
-		philo = (t_philo *)args->philo_node->content;
-		if (philo->is_ready == TRUE)
-			i++;
-		args->philo_node = args->philo_node->next->next;
-		usleep(100);
-	}
-	pthread_mutex_unlock(args->all_philo_is_ready);
-	usleep(20);
-}
-
 int resolver(t_philo_args *args, t_node **node)
 {
 	t_uint			i;
@@ -84,29 +65,50 @@ int resolver(t_philo_args *args, t_node **node)
 	t_data			data;
 	pthread_t		manager_thread;
 	
-	if (!pthread_mutex_init(&common_data.death_mutex, NULL) && !pthread_mutex_init(&common_data.all_philo_is_ready, NULL))
+	printf("SON GOKU\n");
+	if (pthread_mutex_init(&common_data.death_mutex, NULL) || pthread_mutex_init(&common_data.all_philo_is_ready, NULL))
 		return (FALSE);
+	printf("SON GOKU\n");
 	common_data.args = args;
+	common_data.philo_is_dead = FALSE;
 	data = (t_data){.common_data = &common_data, .node_list = *node};
-	if (!pthread_create(&manager_thread, NULL, manager, (void *)(&data)))
+	if (pthread_create(&manager_thread, NULL, manager, (void *)(&data)))
 		return (FALSE);
+
+	t_node *current = *node;
 	i = 0;
 	while (i < args->number_of_philosophers)
 	{
-		if (!pthread_mutex_init(&((t_fork *)(*node)->content)->mutex, NULL));
+		t_philo *philo = (t_philo *)current->content;
+		philo->data = &common_data;
+
+		if (pthread_mutex_init(&philo->mtx_eat, NULL))
 			return (FALSE);
-		*node = (*node)->next;
-		((t_philo *)(*node)->content)->data = &common_data;
-		if (!pthread_create(&((t_philo *)(*node)->content)->thread, NULL, routine, (void *)(*node)))
+
+		if (pthread_create(&philo->thread, NULL, (void *)routine, (void *)current))
 			return (FALSE);
+
+		current = current->next;
+	
+		t_fork *fork = (t_fork *)current->content;
+		if (pthread_mutex_init(&fork->mutex, NULL))
+			return (FALSE);
+
+		current = current->next;
 		i++;
 	}
+	
+	pthread_join(manager_thread, NULL);
+
+	current = *node;
 	i = 0;
 	while (i < args->number_of_philosophers)
 	{
-		pthread_join(((t_philo *)(*node)->content)->thread, NULL);
-		*node = (*node)->next->next;
+		t_philo *philo = (t_philo *)current->content;
+		pthread_join(philo->thread, NULL);
+		current = current->next->next;
 		i++;
 	}
+
 	return (0);
 }

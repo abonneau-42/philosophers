@@ -11,7 +11,7 @@ __uint64_t get_time(void)
 
 void	print_action(t_state state, t_philo *philo)
 {
-	const __uint64_t timestamp = get_time();
+	const __uint64_t time = get_time();
 	const char	*message[] = {
 		" died\n",
 		" is eating\n",

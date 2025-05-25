@@ -18,7 +18,7 @@ __uint64_t	get_time_to_wait(__uint64_t duration, t_philo *philo)
 	return (end_default);
 }
 
-inline void	ph_sleep(__uint64_t duration, t_philo *philo)
+void	ph_sleep(__uint64_t duration, t_philo *philo)
 {
 	__uint64_t	time;
 
