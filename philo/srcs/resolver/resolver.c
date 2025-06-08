@@ -6,109 +6,68 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/25 17:33:21 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 20:40:10 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_bool is_include_array_n(int i, int *array, int n)
+t_bool	init_philos_and_forks(t_uint nb_philo, t_node *current, t_common_data *common_data)
 {
-	int j;
-
-	j = 0;
-	while (j < n)
+	t_uint	i;
+		
+	i = 0;
+	while (i < nb_philo)
 	{
-		if (array[j] == i)
+		t_philo *philo = (t_philo *)current->content;
+		philo->data = common_data;
+		if (pthread_mutex_init(&philo->mtx_eat, NULL))
 			return (TRUE);
-		j++;
+		if (pthread_create(&philo->thread, NULL, (void *)routine, (void *)current))
+			return (TRUE);
+		current = current->next;
+		t_fork *fork = (t_fork *)current->content;
+		if (pthread_mutex_init(&fork->mutex, NULL))
+			return (TRUE);
+		current = current->next;
+		i++;
 	}
 	return (FALSE);
 }
 
-void	*ft_memset(void *s, int c, size_t n)
+t_bool	join_philos(t_uint nb_philo, t_node *current)
 {
-	unsigned char	*ptr;
-
-	ptr = s;
-	while (n--)
-		*ptr++ = c;
-	return (s);
-}
-
-void	*ft_bzero(void *s, size_t n)
-{
-	return (ft_memset(s, 0, n));
-}
-
-//void	*ft_calloc(size_t nmemb, size_t size)
-//{
-//	void	*ptr;
-//	size_t	total_size;
-
-//	total_size = size * nmemb;
-//	if (!nmemb)
-//		return (malloc(0));
-//	if ((total_size / nmemb) != size)
-//		return (NULL);
-//	ptr = malloc(total_size);
-//	if (!ptr)
-//		return (NULL);
-//	ft_bzero(ptr, total_size);
-//	return (ptr);
-//}
-
-int resolver(t_philo_args *args, t_node **node)
-{
-	t_uint			i;
-	t_common_data	common_data;
-	t_data			data;
-	pthread_t		manager_thread;
-	
-	printf("SON GOKU\n");
-	if (pthread_mutex_init(&common_data.death_mutex, NULL) || pthread_mutex_init(&common_data.all_philo_is_ready, NULL))
-		return (FALSE);
-	printf("SON GOKU\n");
-	common_data.args = args;
-	common_data.philo_is_dead = FALSE;
-	data = (t_data){.common_data = &common_data, .node_list = *node};
-	if (pthread_create(&manager_thread, NULL, manager, (void *)(&data)))
-		return (FALSE);
-
-	t_node *current = *node;
+	t_uint	i;
+		
 	i = 0;
-	while (i < args->number_of_philosophers)
+	while (i < nb_philo)
 	{
 		t_philo *philo = (t_philo *)current->content;
-		philo->data = &common_data;
-
-		if (pthread_mutex_init(&philo->mtx_eat, NULL))
-			return (FALSE);
-
-		if (pthread_create(&philo->thread, NULL, (void *)routine, (void *)current))
-			return (FALSE);
-
-		current = current->next;
-	
-		t_fork *fork = (t_fork *)current->content;
-		if (pthread_mutex_init(&fork->mutex, NULL))
-			return (FALSE);
-
-		current = current->next;
-		i++;
-	}
-	
-	pthread_join(manager_thread, NULL);
-
-	current = *node;
-	i = 0;
-	while (i < args->number_of_philosophers)
-	{
-		t_philo *philo = (t_philo *)current->content;
-		pthread_join(philo->thread, NULL);
+		if (pthread_join(philo->thread, NULL))
+			return (TRUE);
 		current = current->next->next;
 		i++;
 	}
+	return (FALSE);
+}
 
+int resolver(t_philo_args *args, t_node **node)
+{
+	t_common_data	common_data;
+	const t_data	data = (t_data){.common_data = &common_data, .node_list = *node};
+	pthread_t		manager_thread;
+	
+	if (pthread_mutex_init(&common_data.death_mutex, NULL) || pthread_mutex_init(&common_data.all_philo_is_ready, NULL))
+		return (FALSE);
+	common_data.args = args;
+	common_data.philo_is_dead = FALSE;
+	if (pthread_create(&manager_thread, NULL, manager, (void *)(&data)))
+		return (FALSE);
+	if (init_philos_and_forks(args->number_of_philosophers, *node, &common_data))
+		return (FALSE);
+	if (pthread_join(manager_thread, NULL))
+		return (FALSE);
+	if (join_philos(args->number_of_philosophers, *node))
+		return (FALSE);
 	return (0);
 }
