@@ -1,14 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ph_is_dead.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/08 22:27:17 by abonneau          #+#    #+#             */
+/*   Updated: 2025/06/08 22:29:42 by abonneau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 t_bool	ph_is_dead(t_philo *philo)
 {
-	__uint64_t	time;
+	const __uint64_t	ts_current = get_time();
 
-	time = get_time();
-	if (time - philo->lts_eat > philo->data->args->lifetime)
-	{
-		print_action(dead, philo);
-		return (TRUE);
-	}
-	return (FALSE);
+	if (ts_current - philo->lts_eat <= philo->data->args->lifetime)
+		return (FALSE);
+	print_action(dead, philo);
+	return (TRUE);
 }
