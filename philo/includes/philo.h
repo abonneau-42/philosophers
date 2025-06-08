@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 21:02:22 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:30:18 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ t_bool	init_watcher_thread(pthread_t *watchdog_thread, t_routine_args args);
 
 void	print_action(t_state state, t_philo *philo);
 t_bool	fk_take(t_philo *philo, t_fork *fork);
-void	fk_put(t_fork *fork);
+//void	fk_put(t_fork *fork);
 
 t_bool	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork);
 
@@ -185,6 +185,8 @@ t_bool	ph_get_dead(t_common_data *data);
 t_bool	ph_is_dead(t_philo *philo);
 
 void	ph_stop_all(t_common_data *data);
+
+void	fk_puts(t_fork *l_fork, t_fork *r_fork);
 
 
 
