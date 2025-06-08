@@ -1,21 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ph_take_forks.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/08 21:34:30 by abonneau          #+#    #+#             */
+/*   Updated: 2025/06/08 21:45:24 by abonneau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-t_bool	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork)
+void	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork)
 {
-	int		put_left;
-	int		put_right;
+	t_bool	has_fk_l;
+	t_bool	has_fk_r;
 
-	put_left = 0;
-	put_right = 0;
-	while (put_left + put_right < 2)
+	has_fk_l = FALSE;
+	has_fk_r = FALSE;
+	while (!(has_fk_l && has_fk_r))
 	{
 		if (ph_is_dead(philo))
-			break ;
-		if (!put_left)
-			put_left = fk_take(philo, l_fork);
-		if (!put_right)
-			put_right = fk_take(philo, r_fork);
-		usleep(200);
+			return ;
+		if (!has_fk_l)
+			has_fk_l = fk_take(philo, l_fork);
+		if (!has_fk_r)
+			has_fk_r = fk_take(philo, r_fork);
+		usleep(USLEEP_DURATION);
 	}
-	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 21:30:18 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:44:17 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ typedef enum e_state
 	taking
 }	t_state;
 
+# define USLEEP_DURATION 200
+
 
 t_parse_error	get_arg(const t_args args, int param_number, t_get_args_entry entry);
 void			get_args(const t_args args, t_get_args_entry *entries, int entries_count);
@@ -169,7 +171,7 @@ void	print_action(t_state state, t_philo *philo);
 t_bool	fk_take(t_philo *philo, t_fork *fork);
 //void	fk_put(t_fork *fork);
 
-t_bool	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork);
+void	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork);
 
 
 __uint64_t get_time(void);
