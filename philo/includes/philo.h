@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 21:44:17 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 22:20:14 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum e_bool
 typedef struct s_philo_args
 {
 	unsigned int	nb_philo;
-	unsigned int	time_to_die;
+	unsigned int	lifetime;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
 	unsigned int	number_of_times_each_philosopher_must_eat;
@@ -89,7 +89,7 @@ typedef struct s_common_data
 typedef struct s_philo
 {
 	t_uint			id;
-	size_t			last_time_eaten;
+	size_t			lts_eat;
 	t_bool 			is_ready;
 	t_uint			number_of_times_eaten;
 	pthread_mutex_t	mtx_eat;
@@ -138,6 +138,7 @@ typedef enum e_state
 }	t_state;
 
 # define USLEEP_DURATION 200
+# define USLEEP_DURATION_ACTION 250
 
 
 t_parse_error	get_arg(const t_args args, int param_number, t_get_args_entry entry);

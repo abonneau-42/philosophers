@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:08:48 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 21:44:41 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:53:02 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ph_worker(void *arg)
 	philo->is_ready = TRUE;
 	pthread_mutex_lock(&philo->data->all_philo_is_ready);
 	pthread_mutex_unlock(&philo->data->all_philo_is_ready);
-	philo->last_time_eaten = get_time();
+	philo->lts_eat = get_time();
 	if (philo->id % 2)
 		ph_sleep(philo->data->args->time_to_eat / 2, philo);
 	while (!ph_is_dead(philo) && !ph_get_dead(philo->data))
