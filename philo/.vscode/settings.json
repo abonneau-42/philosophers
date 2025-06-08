@@ -5,6 +5,7 @@
 		"utility": "c",
 		"philo.h": "c",
 		"stdio.h": "c",
-		"initializer_list": "c"
+		"initializer_list": "c",
+		"stdint.h": "c"
 	}
 }

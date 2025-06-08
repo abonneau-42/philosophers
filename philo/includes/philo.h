@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/25 20:01:17 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:02:22 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef enum e_bool
 
 typedef struct s_philo_args
 {
-	unsigned int	number_of_philosophers;
+	unsigned int	nb_philo;
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
@@ -117,7 +117,7 @@ typedef struct s_routine_args
 typedef struct s_data
 {
 	t_common_data	*common_data;
-	t_node			*node_list;
+	t_node			*node;
 }	t_data;
 
 
@@ -156,7 +156,7 @@ void	lstadd_bidir_front(t_node **node_list, void *content);
 void	lstadd_bidir_back(t_node **node_list, void *content);
 
 void	*watchdog(void *arg);
-void	routine(void *arg);
+void	ph_worker(void *arg);
 //t_bool	init_philo(t_routine_args args);
 //t_bool	init_mutex(t_node **node);
 //t_bool	init_death_mutex(pthread_mutex_t *death_mutex);

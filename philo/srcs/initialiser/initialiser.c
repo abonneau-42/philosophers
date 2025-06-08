@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 17:38:58 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/25 19:47:29 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:02:22 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	initialiser(t_philo_args *philo_args, t_node **node_list)
 	t_fork	*fork;
 	
 	i = 0;
-	while (i++ < philo_args->number_of_philosophers)
+	while (i++ < philo_args->nb_philo)
 	{
 		philo = malloc(sizeof(t_philo));
 		if (!philo)

@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:48:57 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/04 20:46:05 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:02:22 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	parser(const t_args args, t_philo_args *philo_args)
 {
 	get_args(args, (t_get_args_entry[5]){
-		{&philo_args->number_of_philosophers, UNSIGNED_INT, REQUIRED},
+		{&philo_args->nb_philo, UNSIGNED_INT, REQUIRED},
 		{&philo_args->time_to_die, UNSIGNED_INT, REQUIRED},
 		{&philo_args->time_to_eat, UNSIGNED_INT, REQUIRED},
 		{&philo_args->time_to_sleep, UNSIGNED_INT, REQUIRED},

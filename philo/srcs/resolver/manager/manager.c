@@ -7,12 +7,12 @@ void	wait_all_philo_is_ready(t_data *data)
 
 	i = 0;
 	pthread_mutex_lock(&data->common_data->all_philo_is_ready);
-	while (i < data->common_data->args->number_of_philosophers)
+	while (i < data->common_data->args->nb_philo)
 	{
-		philo = (t_philo *)data->node_list->content;
+		philo = (t_philo *)data->node->content;
 		if (philo->is_ready == TRUE)
 			i++;
-		data->node_list = data->node_list->next->next;
+		data->node = data->node->next->next;
 		usleep(100);
 	}
 	pthread_mutex_unlock(&data->common_data->all_philo_is_ready);
@@ -49,7 +49,7 @@ void	*manager(void *arg)
 
 	while (!ph_get_dead(data->common_data))
 	{
-		if (get_count(data->node_list, data->common_data->args->number_of_philosophers))
+		if (get_count(data->node, data->common_data->args->nb_philo))
 			ph_stop_all(data->common_data);
 		usleep(data->common_data->args->time_to_eat * 500);
 	}

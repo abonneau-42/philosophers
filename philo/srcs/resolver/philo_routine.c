@@ -1,28 +1,6 @@
 #include "philo.h"
 
-t_bool is_simulation_over(t_routine_args *args)
-{
-    t_bool result;
-
-    pthread_mutex_lock(args->death_mutex);
-    result = *args->is_simulation_over;
-    pthread_mutex_unlock(args->death_mutex);
-    return result;
-}
-
-t_bool is_simulation_over_in_mutex(t_routine_args *args)
-{
-    t_bool result;
-
-    pthread_mutex_lock(args->death_mutex);
-    result = *args->is_simulation_over;
-    pthread_mutex_unlock(args->death_mutex);
-	pthread_mutex_unlock(&((t_fork *)((args->philo_node->next)->content))->mutex);
-	pthread_mutex_unlock(&((t_fork *)((args->philo_node->prev)->content))->mutex);
-    return result;
-}
-
-void	routine(void *arg)
+void	ph_worker(void *arg)
 {
 	const t_node *node = (t_node *)arg;
 	t_fork *l_fork = ((t_fork *)((node->prev)->content));
