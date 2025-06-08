@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fk_actions.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/08 23:46:34 by abonneau          #+#    #+#             */
+/*   Updated: 2025/06/08 23:46:56 by abonneau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 t_bool	fk_take(t_philo *philo, t_fork *fork)
 {
-	t_bool is_available;
+	t_bool	is_available;
 
 	pthread_mutex_lock(&fork->mutex);
 	is_available = fork->is_available;

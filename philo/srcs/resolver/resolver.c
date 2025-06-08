@@ -6,35 +6,39 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 21:03:15 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:32:12 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 static t_bool	init_philos_and_forks(
-	t_uint nb_philo,
+	t_philo_args *args,
 	t_node *current,
 	t_common_data *common_data
 )
 {
 	t_uint	i;
-	t_philo	*philo;
-	t_fork	*fork;
+	t_philo	*ph;
 
 	i = 0;
-	while (i++ < nb_philo)
+	while (i++ < args->nb_philo)
 	{
-		philo = (t_philo *)current->content;
-		philo->data = common_data;
-		if (pthread_mutex_init(&philo->mtx_eat, NULL))
+		ph = (t_philo *)current->content;
+		ph->data = common_data;
+		if (pthread_mutex_init(&ph->mtx_eat, NULL))
 			return (TRUE);
-		if (pthread_create(&philo->thread, NULL,
-				(void *)ph_worker, (void *)current))
+		if (args->philo_meal_quota > 0)
+		{
+			if (pthread_create(&ph->thread, NULL,
+					(void *)ph_worker, (void *)current))
+				return (TRUE);
+		}
+		else if (pthread_create(&ph->thread, NULL,
+				(void *)ph_worker_wt_limit, (void *)current))
 			return (TRUE);
 		current = current->next;
-		fork = (t_fork *)current->content;
-		if (pthread_mutex_init(&fork->mutex, NULL))
+		if (pthread_mutex_init(&((t_fork *)current->content)->mutex, NULL))
 			return (TRUE);
 		current = current->next;
 	}
@@ -68,9 +72,15 @@ int	resolver(t_philo_args *args, t_node **node)
 		return (FALSE);
 	common_data.args = args;
 	common_data.philo_is_dead = FALSE;
-	if (pthread_create(&manager_thread, NULL, manager, (void *)(&data)))
+	if (args->philo_meal_quota > 0)
+	{
+		if (pthread_create(&manager_thread, NULL, manager, (void *)(&data)))
+			return (FALSE);
+	}
+	else if (pthread_create(&manager_thread, NULL, manager_wt_limit,
+			(void *)(&data)))
 		return (FALSE);
-	if (init_philos_and_forks(args->nb_philo, *node, &common_data))
+	if (init_philos_and_forks(args, *node, &common_data))
 		return (FALSE);
 	if (pthread_join(manager_thread, NULL))
 		return (FALSE);

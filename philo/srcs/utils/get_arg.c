@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:52:27 by abonneau          #+#    #+#             */
-/*   Updated: 2025/05/04 20:58:32 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:42:09 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ t_parse_error	get_arg(const t_args args, int param_number,
 		t_get_args_entry entry)
 {
 	t_is_type_callback	*callbacks;
-	
+
 	if (param_number >= args.argc)
 	{
 		if (entry.optional == OPTIONAL)
 		{
-			*(unsigned int*)entry.value = 0;
+			*(unsigned int *)entry.value = 0;
 			return (PARAMS_VALID);
 		}
 		return (PARAMS_NOT_PRESENT);
@@ -39,9 +39,13 @@ t_parse_error	get_arg(const t_args args, int param_number,
 	return (PARAMS_VALID);
 }
 
-void	get_args(const t_args args, t_get_args_entry *entries, int entries_count)
+void	get_args(
+	const t_args args,
+	t_get_args_entry *entries,
+	int entries_count
+)
 {
-	int	i;
+	int				i;
 	t_parse_error	status;
 
 	i = 0;

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   manager.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
+/*   Updated: 2025/06/08 23:46:24 by abonneau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void	wait_all_philo_is_ready(t_data *data)
+static void	wait_all_philo_is_ready(t_data *data)
 {
 	t_uint	i;
 	t_philo	*philo;
@@ -29,7 +41,8 @@ static int	get_count(t_node *node, int nbs)
 	while (i < nbs)
 	{
 		pthread_mutex_lock(&(((t_philo *)(node->content))->mtx_eat));
-		if (((t_philo *)(node->content))->number_of_times_eaten >= ((t_philo *)(node->content))->data->args->number_of_times_each_philosopher_must_eat)
+		if (((t_philo *)(node->content))->number_of_times_eaten
+			>= ((t_philo *)(node->content))->data->args->philo_meal_quota)
 			count++;
 		pthread_mutex_unlock(&(((t_philo *)(node->content))->mtx_eat));
 		node = node->next->next;
@@ -42,16 +55,26 @@ static int	get_count(t_node *node, int nbs)
 
 void	*manager(void *arg)
 {
-	t_data *data;
-	
+	t_data	*data;
+
 	data = (t_data *)arg;
 	wait_all_philo_is_ready(data);
-
 	while (!ph_get_dead(data->common_data))
 	{
 		if (get_count(data->node, data->common_data->args->nb_philo))
 			ph_stop_all(data->common_data);
 		usleep(data->common_data->args->time_to_eat * 500);
 	}
-    return (NULL);
+	return (NULL);
+}
+
+void	*manager_wt_limit(void *arg)
+{
+	t_data	*data;
+
+	data = (t_data *)arg;
+	wait_all_philo_is_ready(data);
+	while (!ph_get_dead(data->common_data))
+		usleep(data->common_data->args->time_to_eat * 500);
+	return (NULL);
 }

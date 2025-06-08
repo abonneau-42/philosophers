@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 22:20:14 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:25:18 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_philo_args
 	unsigned int	lifetime;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
-	unsigned int	number_of_times_each_philosopher_must_eat;
+	unsigned int	philo_meal_quota;
 }	t_philo_args;
 
 typedef int			(*t_is_type_callback)(const char *, void *);
@@ -159,7 +159,7 @@ void	lstadd_bidir_front(t_node **node_list, void *content);
 void	lstadd_bidir_back(t_node **node_list, void *content);
 
 void	*watchdog(void *arg);
-void	ph_worker(void *arg);
+
 //t_bool	init_philo(t_routine_args args);
 //t_bool	init_mutex(t_node **node);
 //t_bool	init_death_mutex(pthread_mutex_t *death_mutex);
@@ -179,6 +179,11 @@ __uint64_t get_time(void);
 
 
 void	*manager(void *arg);
+void	*manager_wt_limit(void *arg);
+void	ph_worker(void *arg);
+void	ph_worker_wt_limit(void *arg);
+
+
 
 void	ph_sleep(__uint64_t duration, t_philo *philo);
 

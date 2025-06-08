@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:52:16 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/25 17:24:56 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/08 23:40:38 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	lstadd_bidir_front(t_node **node_list, void *content)
 	*node_list = new;
 }
 
-
 void	lstadd_bidir_back(t_node **node_list, void *content)
 {
 	t_node	*new;
@@ -56,4 +55,3 @@ void	lstadd_bidir_back(t_node **node_list, void *content)
 	(*node_list)->prev->next = new;
 	(*node_list)->prev = new;
 }
-
