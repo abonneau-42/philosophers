@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/09 00:21:27 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/09 00:26:16 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,9 @@ typedef enum e_state
 
 # define USLEEP_DURATION 200
 # define USLEEP_DURATION_ACTION 250
+# define USLEEP_DURATION_MANAGER 500
+# define USLEEP_DURATION_READY 100
+# define USLEEP_DURATION_MANAGER_OFFSET 20
 
 t_parse_error	get_arg(
 					const t_args args,

@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 23:46:24 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/09 00:26:02 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ static void	wait_all_philo_is_ready(t_data *data)
 		if (philo->is_ready == TRUE)
 			i++;
 		data->node = data->node->next->next;
-		usleep(100);
+		usleep(USLEEP_DURATION_READY);
 	}
 	pthread_mutex_unlock(&data->common_data->all_philo_is_ready);
-	usleep(20);
+	usleep(USLEEP_DURATION_MANAGER_OFFSET);
 }
 
 static int	get_count(t_node *node, int nbs)
@@ -63,7 +63,7 @@ void	*manager(void *arg)
 	{
 		if (get_count(data->node, data->common_data->args->nb_philo))
 			ph_stop_all(data->common_data);
-		usleep(data->common_data->args->time_to_eat * 500);
+		usleep(data->common_data->args->time_to_eat * USLEEP_DURATION_MANAGER);
 	}
 	return (NULL);
 }
@@ -75,6 +75,6 @@ void	*manager_wt_limit(void *arg)
 	data = (t_data *)arg;
 	wait_all_philo_is_ready(data);
 	while (!ph_get_dead(data->common_data))
-		usleep(data->common_data->args->time_to_eat * 500);
+		usleep(data->common_data->args->time_to_eat * USLEEP_DURATION_MANAGER);
 	return (NULL);
 }
