@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 22:31:30 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 22:32:25 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:41:59 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ t_bool	ph_get_dead(t_common_data *data)
 void	ph_stop_all(t_common_data *data)
 {
 	pthread_mutex_lock(&data->death_mutex);
-	data->philo_is_dead = TRUE;
+	data->is_simulation_over = TRUE;
 	pthread_mutex_unlock(&data->death_mutex);
 }

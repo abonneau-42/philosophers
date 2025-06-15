@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 18:22:22 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:22:06 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	resolver(t_philo_args *args, t_node **node)
 		|| pthread_mutex_init(&common_data.nb_philos_ready_mtx, NULL))
 		return (FALSE);
 	common_data.args = args;
+	common_data.start_time = get_time();
+	common_data.is_simulation_over = FALSE;
 	common_data.philo_is_dead = FALSE;
 	common_data.nb_philos_ready = 0;
 	if (args->philo_meal_quota > 0)

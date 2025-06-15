@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:03:49 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 15:16:46 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:06:47 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	print_action(t_state state, t_philo *philo)
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if ((state == dead && philo->data->philo_is_dead == FALSE)
 		|| philo->data->philo_is_dead == FALSE)
-		printf("%zu %u%s", time,
+		printf("%zu %u%s", time - philo->data->start_time,
 			philo->id, message[state]);
 	if (state == dead)
 		philo->data->philo_is_dead = TRUE;

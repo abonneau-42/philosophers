@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 19:08:49 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:17:28 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,9 @@ typedef struct s_common_data
 	t_uint			nb_philos_ready;
 	pthread_mutex_t	nb_philos_ready_mtx;
 	t_bool			philo_is_dead;
+	t_bool			is_simulation_over;
 	t_uint			max_duration;
+	__uint64_t		start_time;
 }	t_common_data;
 
 typedef struct s_philo

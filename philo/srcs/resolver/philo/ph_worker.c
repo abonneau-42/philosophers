@@ -6,11 +6,21 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:08:48 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 18:23:34 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:42:53 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static t_bool	ph_is_over(t_common_data *data)
+{
+	t_bool	dead;
+
+	pthread_mutex_lock(&data->death_mutex);
+	dead = data->is_simulation_over;
+	pthread_mutex_unlock(&data->death_mutex);
+	return (dead);
+}
 
 void	ph_worker(void *arg)
 {
@@ -27,7 +37,7 @@ void	ph_worker(void *arg)
 	philo->lts_eat = get_time();
 	if (philo->data->args->nb_philo > 1 && philo->id % 2)
 		ph_sleep(philo->data->args->time_to_eat >> 1, philo);
-	while (!ph_is_dead(philo) && !ph_get_dead(philo->data))
+	while (!ph_is_dead(philo) && !ph_is_over(philo->data))
 	{
 		ph_take_forks(philo, l_fork, r_fork);
 		print_action(eating, philo);
@@ -57,7 +67,7 @@ void	ph_worker_wt_limit(void *arg)
 	philo->lts_eat = get_time();
 	if (philo->data->args->nb_philo > 1 && philo->id % 2)
 		ph_sleep(philo->data->args->time_to_eat >> 1, philo);
-	while (!ph_is_dead(philo) && !ph_get_dead(philo->data))
+	while (!ph_is_dead(philo) && !ph_is_over(philo->data))
 	{
 		ph_take_forks(philo, l_fork, r_fork);
 		print_action(eating, philo);
