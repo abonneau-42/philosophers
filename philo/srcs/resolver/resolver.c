@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/09 00:27:03 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 14:25:43 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,10 @@ int	resolver(t_philo_args *args, t_node **node)
 	const t_data	data = (t_data){.common_data = &common_data, .node = *node};
 	pthread_t		manager_thread;
 
+	if (args->time_to_eat > 2000)
+		common_data.max_duration = 2000 * USLEEP_DURATION_MANAGER;
+	else
+		common_data.max_duration = args->time_to_eat * USLEEP_DURATION_MANAGER;
 	if (pthread_mutex_init(&common_data.death_mutex, NULL)
 		|| pthread_mutex_init(&common_data.all_philo_is_ready, NULL))
 		return (FALSE);

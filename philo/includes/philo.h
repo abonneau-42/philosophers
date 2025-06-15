@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/09 00:26:16 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 17:42:41 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_common_data
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	all_philo_is_ready;
 	t_bool			philo_is_dead;
+	t_uint			max_duration;
 }	t_common_data;
 
 typedef struct s_philo
@@ -119,6 +120,12 @@ typedef struct s_data
 	t_common_data	*common_data;
 	t_node			*node;
 }	t_data;
+
+typedef struct s_delay
+{
+	__uint64_t	ts_75;
+	__uint64_t	end;
+}	t_delay;
 
 # define TAKEN_FORK " has taken a fork\n"
 # define EATING " is eating\n"

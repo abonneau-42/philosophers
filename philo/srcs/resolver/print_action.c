@@ -6,14 +6,14 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:03:49 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/09 00:34:15 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:16:46 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stdint.h>
 
-__uint64_t	get_time(void)
+inline __uint64_t	get_time(void)
 {
 	struct timeval	tv;
 

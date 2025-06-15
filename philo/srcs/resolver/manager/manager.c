@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/09 00:29:28 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 14:53:45 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	*manager(void *arg)
 	{
 		if (get_count(data->node, data->common_data->args->nb_philo))
 			ph_stop_all(data->common_data);
-		usleep(data->common_data->args->time_to_eat * USLEEP_DURATION_MANAGER);
+		usleep(data->common_data->max_duration);
 	}
 	return (NULL);
 }
@@ -75,6 +75,6 @@ void	*manager_wt_limit(void *arg)
 	data = (t_data *)arg;
 	wait_all_philo_is_ready(data);
 	while (!ph_get_dead(data->common_data))
-		usleep(data->common_data->args->time_to_eat * USLEEP_DURATION_MANAGER);
+		usleep(data->common_data->max_duration);
 	return (NULL);
 }
