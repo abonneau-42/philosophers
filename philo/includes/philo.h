@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 17:42:41 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 19:08:49 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ typedef struct s_common_data
 	t_philo_args	*args;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	all_philo_is_ready;
+	t_uint			nb_philos_ready;
+	pthread_mutex_t	nb_philos_ready_mtx;
 	t_bool			philo_is_dead;
 	t_uint			max_duration;
 }	t_common_data;
@@ -144,7 +146,7 @@ typedef enum e_state
 }	t_state;
 
 # define USLEEP_DURATION 200
-# define USLEEP_DURATION_ACTION 250
+# define USLEEP_DURATION_ACTION 1000
 # define USLEEP_DURATION_MANAGER 500
 # define USLEEP_DURATION_READY 100
 # define USLEEP_DURATION_MANAGER_OFFSET 20
@@ -173,7 +175,6 @@ void			lstadd_bidir_front(t_node **node_list, void *content);
 void			lstadd_bidir_back(t_node **node_list, void *content);
 
 void			print_action(t_state state, t_philo *philo);
-t_bool			fk_take(t_philo *philo, t_fork *fork);
 
 void			ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork);
 
@@ -193,6 +194,6 @@ t_bool			ph_get_dead(t_common_data *data);
 t_bool			ph_is_dead(t_philo *philo);
 
 void			ph_stop_all(t_common_data *data);
-void			fk_puts(t_fork *l_fork, t_fork *r_fork);
+void			ph_puts_forks(t_fork *l_fork, t_fork *r_fork);
 
 #endif

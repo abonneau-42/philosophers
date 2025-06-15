@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 14:53:45 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 18:24:18 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 static void	wait_all_philo_is_ready(t_data *data)
 {
 	t_uint	i;
-	t_philo	*philo;
+	t_uint	nb_philos_ready;
 
 	i = 0;
 	pthread_mutex_lock(&data->common_data->all_philo_is_ready);
 	while (i < data->common_data->args->nb_philo)
 	{
-		philo = (t_philo *)data->node->content;
-		if (philo->is_ready == TRUE)
-			i++;
-		data->node = data->node->next->next;
+
+		pthread_mutex_lock(&data->common_data->nb_philos_ready_mtx);
+		nb_philos_ready = data->common_data->nb_philos_ready;
+		pthread_mutex_unlock(&data->common_data->nb_philos_ready_mtx);
+		if (nb_philos_ready == data->common_data->args->nb_philo)
+		{
+			pthread_mutex_unlock(&data->common_data->all_philo_is_ready);
+			return ;
+		}
 		usleep(USLEEP_DURATION_READY);
 	}
-	pthread_mutex_unlock(&data->common_data->all_philo_is_ready);
-	usleep(USLEEP_DURATION_MANAGER_OFFSET);
 }
 
 static int	get_count(t_node *node, int nbs)

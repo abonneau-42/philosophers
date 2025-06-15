@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:08:48 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 16:50:24 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/15 18:23:34 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	ph_worker(void *arg)
 	t_fork *const	r_fork = ((t_fork *)((node->next)->content));
 	t_philo *const	philo = (t_philo *)node->content;
 
-	philo->is_ready = TRUE;
+	pthread_mutex_lock(&philo->data->nb_philos_ready_mtx);
+	philo->data->nb_philos_ready++;
+	pthread_mutex_unlock(&philo->data->nb_philos_ready_mtx);
 	pthread_mutex_lock(&philo->data->all_philo_is_ready);
 	pthread_mutex_unlock(&philo->data->all_philo_is_ready);
 	philo->lts_eat = get_time();
@@ -31,13 +33,13 @@ void	ph_worker(void *arg)
 		print_action(eating, philo);
 		ph_sleep(philo->data->args->time_to_eat, philo);
 		ph_inc_meal_count(philo);
-		fk_puts(l_fork, r_fork);
+		ph_puts_forks(l_fork, r_fork);
 		print_action(sleeping, philo);
 		ph_sleep(philo->data->args->time_to_sleep, philo);
 		print_action(thinking, philo);
 		usleep(100);
 	}
-	fk_puts(l_fork, r_fork);
+	ph_puts_forks(l_fork, r_fork);
 }
 
 void	ph_worker_wt_limit(void *arg)
@@ -47,7 +49,9 @@ void	ph_worker_wt_limit(void *arg)
 	t_fork *const	r_fork = ((t_fork *)((node->next)->content));
 	t_philo *const	philo = (t_philo *)node->content;
 
-	philo->is_ready = TRUE;
+	pthread_mutex_lock(&philo->data->nb_philos_ready_mtx);
+	philo->data->nb_philos_ready++;
+	pthread_mutex_unlock(&philo->data->nb_philos_ready_mtx);
 	pthread_mutex_lock(&philo->data->all_philo_is_ready);
 	pthread_mutex_unlock(&philo->data->all_philo_is_ready);
 	philo->lts_eat = get_time();
@@ -58,11 +62,11 @@ void	ph_worker_wt_limit(void *arg)
 		ph_take_forks(philo, l_fork, r_fork);
 		print_action(eating, philo);
 		ph_sleep(philo->data->args->time_to_eat, philo);
-		fk_puts(l_fork, r_fork);
+		ph_puts_forks(l_fork, r_fork);
 		print_action(sleeping, philo);
 		ph_sleep(philo->data->args->time_to_sleep, philo);
 		print_action(thinking, philo);
 		usleep(100);
 	}
-	fk_puts(l_fork, r_fork);
+	ph_puts_forks(l_fork, r_fork);
 }
