@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:34:30 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/16 17:44:34 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/17 04:46:39 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ static t_bool	fk_take(t_philo *philo, t_fork *fork)
 	return (is_available);
 }
 
+static void	fk_put(t_fork *fork)
+{
+	pthread_mutex_lock(&fork->mutex);
+	fork->is_available = TRUE;
+	pthread_mutex_unlock(&fork->mutex);
+}
+
 void	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork)
 {
 	t_bool	has_fk_l;
@@ -32,23 +39,26 @@ void	ph_take_forks(t_philo *philo, t_fork *r_fork, t_fork *l_fork)
 
 	has_fk_l = FALSE;
 	has_fk_r = FALSE;
-	while (!(has_fk_l && has_fk_r))
+	if ((philo->id & 1) == 0)
 	{
-		if (ph_is_dead(philo))
-			return ;
-		if (!has_fk_l)
-			has_fk_l = fk_take(philo, l_fork);
+		while (!(has_fk_l && has_fk_r) && !ph_is_dead(philo))
+		{
+			if (!has_fk_l)
+				has_fk_l = fk_take(philo, l_fork);
+			if (!has_fk_r)
+				has_fk_r = fk_take(philo, r_fork);
+			usleep(USLEEP_DURATION);
+		}
+		return ;
+	}
+	while (!(has_fk_l && has_fk_r) && !ph_is_dead(philo))
+	{
 		if (!has_fk_r)
 			has_fk_r = fk_take(philo, r_fork);
+		if (!has_fk_l)
+			has_fk_l = fk_take(philo, l_fork);
 		usleep(USLEEP_DURATION);
 	}
-}
-
-static void	fk_put(t_fork *fork)
-{
-	pthread_mutex_lock(&fork->mutex);
-	fork->is_available = TRUE;
-	pthread_mutex_unlock(&fork->mutex);
 }
 
 void	ph_puts_forks(t_fork *l_fork, t_fork *r_fork)

@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 22:42:30 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/17 04:41:18 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static void	wait_all_philo_is_ready(t_data *data)
 	pthread_mutex_lock(&data->common_data->all_philo_is_ready);
 	while (i < data->common_data->args->nb_philo)
 	{
-
 		pthread_mutex_lock(&data->common_data->nb_philos_ready_mtx);
 		nb_philos_ready = data->common_data->nb_philos_ready;
 		pthread_mutex_unlock(&data->common_data->nb_philos_ready_mtx);
@@ -65,11 +64,11 @@ void	*manager(void *arg)
 	while (!ph_get_dead(data->common_data))
 	{
 		if (get_count(data->node, data->common_data->args->nb_philo,
-			data->node->content))
-			{
-				ph_stop_all(data->common_data);
-				break;
-			}
+				data->node->content))
+		{
+			ph_stop_all(data->common_data);
+			break ;
+		}
 		usleep(data->common_data->max_duration);
 	}
 	return (NULL);

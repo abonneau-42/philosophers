@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/15 22:17:28 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/17 04:47:40 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ typedef struct s_common_data
 	t_bool			philo_is_dead;
 	t_bool			is_simulation_over;
 	t_uint			max_duration;
+	pthread_mutex_t	eating_mutex;
+	t_uint			philos_eating;
 	__uint64_t		start_time;
 }	t_common_data;
 
@@ -147,7 +149,7 @@ typedef enum e_state
 	taking
 }	t_state;
 
-# define USLEEP_DURATION 200
+# define USLEEP_DURATION 100
 # define USLEEP_DURATION_ACTION 1000
 # define USLEEP_DURATION_MANAGER 500
 # define USLEEP_DURATION_READY 100
