@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:52:16 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:44:12 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:48:10 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_bool	lstadd_bidir_back(t_node **node_list, void *content, t_type_node type)
 		new->next = new;
 		new->prev = new;
 		*node_list = new;
-		return ;
+		return (TRUE);
 	}
 	new->next = *node_list;
 	new->prev = (*node_list)->prev;
