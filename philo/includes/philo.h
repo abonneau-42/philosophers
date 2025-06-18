@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:39:07 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:16:17 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ t_parse_error	get_arg(
 					int param_number,
 					t_get_args_entry entry);
 
-void			get_args(const t_args args,
+int				get_args(const t_args args,
 					t_get_args_entry *entries,
 					int entries_count);
 

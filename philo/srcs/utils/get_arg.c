@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:52:27 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 23:42:09 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:17:29 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_parse_error	get_arg(const t_args args, int param_number,
 	return (PARAMS_VALID);
 }
 
-void	get_args(
+int	get_args(
 	const t_args args,
 	t_get_args_entry *entries,
 	int entries_count
@@ -55,13 +55,14 @@ void	get_args(
 		if (status == PARAMS_NOT_VALID)
 		{
 			printf("Argument %d is not valid\n", i + 1);
-			exit(1);
+			return (0);
 		}
 		if (status == PARAMS_NOT_PRESENT)
 		{
 			printf("Argument %d is not present\n", i + 1);
-			exit(1);
+			return (0);
 		}
 		i++;
 	}
+	return (1);
 }
