@@ -16,8 +16,10 @@ SRCS_FILES = 	main.c \
 				parser/parser.c \
 				initialiser/initialiser.c \
 				resolver/resolver.c \
+				resolver/resolver_utils.c \
 				resolver/print_action.c \
 				resolver/philo/ph_worker.c \
+				resolver/philo/ph_worker_utils.c \
 				resolver/philo/ph_fk_actions.c \
 				resolver/philo/ph_get_dead.c \
 				resolver/philo/ph_inc_meal_count.c \

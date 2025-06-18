@@ -2,6 +2,8 @@
 	"files.associations": {
 		"cstdlib": "c",
 		"philo.h": "c",
-		"utility": "c"
+		"utility": "c",
+		"compare": "c",
+		"type_traits": "c"
 	}
 }

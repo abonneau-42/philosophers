@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:08:48 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/17 04:45:39 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:12:08 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,7 @@ void	ph_worker(void *arg)
 	t_fork *const	r_fork = ((t_fork *)((node->next)->content));
 	t_philo *const	philo = (t_philo *)node->content;
 
-	pthread_mutex_lock(&philo->data->nb_philos_ready_mtx);
-	philo->data->nb_philos_ready++;
-	pthread_mutex_unlock(&philo->data->nb_philos_ready_mtx);
-	pthread_mutex_lock(&philo->data->all_philo_is_ready);
-	pthread_mutex_unlock(&philo->data->all_philo_is_ready);
-	philo->lts_eat = get_time();
-	if (philo->data->args->nb_philo > 1 && philo->id % 2)
-		ph_sleep(philo->data->args->time_to_eat >> 1, philo);
+	ph_prepare_worker(philo);
 	while (!ph_is_dead(philo) && !ph_is_over(philo->data))
 	{
 		wait_to_eat(philo->data, philo);
@@ -92,14 +85,7 @@ void	ph_worker_wt_limit(void *arg)
 	t_fork *const	r_fork = ((t_fork *)((node->next)->content));
 	t_philo *const	philo = (t_philo *)node->content;
 
-	pthread_mutex_lock(&philo->data->nb_philos_ready_mtx);
-	philo->data->nb_philos_ready++;
-	pthread_mutex_unlock(&philo->data->nb_philos_ready_mtx);
-	pthread_mutex_lock(&philo->data->all_philo_is_ready);
-	pthread_mutex_unlock(&philo->data->all_philo_is_ready);
-	philo->lts_eat = get_time();
-	if (philo->data->args->nb_philo > 1 && philo->id % 2)
-		ph_sleep(philo->data->args->time_to_eat >> 1, philo);
+	ph_prepare_worker(philo);
 	while (!ph_is_dead(philo) && !ph_is_over(philo->data))
 	{
 		wait_to_eat(philo->data, philo);

@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/17 04:47:40 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:23:51 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_philo_args
 	unsigned int	lifetime;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
-	unsigned int	philo_meal_quota;
+	unsigned int	ph_meal_goal;
 }	t_philo_args;
 
 typedef int				(*t_is_type_callback)(const char *, void *);
@@ -57,6 +57,12 @@ typedef enum e_is_type
 	INT,
 	UNSIGNED_INT
 }	t_is_type;
+
+typedef enum e_type_node
+{
+	FORK,
+	PHILO
+}	t_type_node;
 
 typedef enum e_optional
 {
@@ -76,6 +82,7 @@ typedef struct s_node
 	struct s_node	*prev;
 	struct s_node	*next;
 	void			*content;
+	t_type_node		type;			
 }	t_node;
 
 typedef struct s_common_data
@@ -166,7 +173,7 @@ void			get_args(const t_args args,
 
 int				parser(const t_args args, t_philo_args *philo_args);
 int				initialiser(t_philo_args *philo_args, t_node **node_list);
-int				resolver(t_philo_args *philo_args, t_node **node_list);
+void			resolver(t_philo_args *philo_args, t_node **node_list);
 void			free_list(t_node **node_list);
 
 long			ft_atol(const char *nptr);
@@ -175,8 +182,10 @@ size_t			ft_strlen(const char *s);
 int				is_int(const char *chr, void *number);
 int				is_unsigned_int(const char *chr, void *number);
 
-void			lstadd_bidir_front(t_node **node_list, void *content);
-void			lstadd_bidir_back(t_node **node_list, void *content);
+void			lstadd_bidir_back(
+					t_node **node_list,
+					void *content,
+					t_type_node type);
 
 void			print_action(t_state state, t_philo *philo);
 
@@ -199,5 +208,30 @@ t_bool			ph_is_dead(t_philo *philo);
 
 void			ph_stop_all(t_common_data *data);
 void			ph_puts_forks(t_fork *l_fork, t_fork *r_fork);
+
+t_bool			join_philos(t_uint nb_philo, t_node *current);
+int				init_common_data(
+					t_philo_args *args,
+					t_common_data *common_data);
+t_bool			init_philos_and_forks(
+					t_philo_args *args,
+					t_node *current,
+					t_common_data *common_data,
+					t_uint *i);
+void			destroy_mtx_and_join_valid_ph(
+					t_uint i,
+					t_node *current);
+void			init_and_join(
+					t_philo_args *args,
+					t_node **node,
+					t_common_data *common_data,
+					pthread_t th_manager);
+t_bool			create_manager(
+					pthread_t *manager_thread,
+					const t_data *data,
+					t_uint ph_meal_goal);
+int				create_common_mutex(t_common_data *common_data);
+void			destroy_all_common_mtx(t_common_data *common_data);
+void			ph_prepare_worker(t_philo *const philo);
 
 #endif

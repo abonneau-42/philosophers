@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 17:38:58 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/08 23:47:58 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:35:15 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	initialiser(t_philo_args *philo_args, t_node **node_list)
 		if (!fork)
 			return (0);
 		*fork = (t_fork){.id = i, .is_available = TRUE};
-		lstadd_bidir_back(node_list, philo);
-		lstadd_bidir_back(node_list, fork);
+		lstadd_bidir_back(node_list, philo, PHILO);
+		lstadd_bidir_back(node_list, fork, FORK);
 	}
 	return (1);
 }

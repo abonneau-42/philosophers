@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/17 04:41:18 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:05:21 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	get_count(t_node *node, int nbs, t_philo *philo)
 	{
 		pthread_mutex_lock(&(philo->mtx_eat));
 		if (philo->number_of_times_eaten
-			>= philo->data->args->philo_meal_quota)
+			>= philo->data->args->ph_meal_goal)
 			count++;
 		pthread_mutex_unlock(&(philo->mtx_eat));
 		node = node->next->next;
