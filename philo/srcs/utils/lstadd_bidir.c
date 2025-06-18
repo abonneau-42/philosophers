@@ -6,19 +6,22 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:52:16 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 14:34:56 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:44:12 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	lstadd_bidir_back(t_node **node_list, void *content, t_type_node type)
+t_bool	lstadd_bidir_back(t_node **node_list, void *content, t_type_node type)
 {
 	t_node	*new;
 
 	new = malloc(sizeof(t_node));
 	if (!new)
-		return ;
+	{
+		free(content);
+		return (FALSE);
+	}
 	new->content = content;
 	new->type = type;
 	if (!(*node_list))
@@ -32,4 +35,5 @@ void	lstadd_bidir_back(t_node **node_list, void *content, t_type_node type)
 	new->prev = (*node_list)->prev;
 	(*node_list)->prev->next = new;
 	(*node_list)->prev = new;
+	return (TRUE);
 }

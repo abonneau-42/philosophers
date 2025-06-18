@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:32:20 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:39:07 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ size_t			ft_strlen(const char *s);
 int				is_int(const char *chr, void *number);
 int				is_unsigned_int(const char *chr, void *number);
 
-void			lstadd_bidir_back(
+t_bool			lstadd_bidir_back(
 					t_node **node_list,
 					void *content,
 					t_type_node type);
