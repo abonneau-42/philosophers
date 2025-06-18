@@ -6,60 +6,74 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:03:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:21:36 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:30:50 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	create_common_mutex(t_common_data *common_data)
+static void	destroy_mtx_and_join_valid_ph(t_uint i, t_node *current)
 {
-	if (pthread_mutex_init(&common_data->death_mutex, NULL))
-		return (FALSE);
-	if (pthread_mutex_init(&common_data->all_philo_is_ready, NULL))
+	if (current->type == FORK)
 	{
-		pthread_mutex_destroy(&common_data->death_mutex);
-		return (FALSE);
+		pthread_mutex_destroy(&((t_philo *)current->content)->mtx_eat);
+		pthread_join(((t_philo *)current->content)->thread, NULL);
 	}
-	if (pthread_mutex_init(&common_data->nb_philos_ready_mtx, NULL))
+	while (i > 0)
 	{
-		pthread_mutex_destroy(&common_data->death_mutex);
-		pthread_mutex_destroy(&common_data->all_philo_is_ready);
-		return (FALSE);
+		pthread_mutex_destroy(&((t_fork *)current->content)->mutex);
+		current = current->prev;
+		pthread_mutex_destroy(&((t_philo *)current->content)->mtx_eat);
+		pthread_join(((t_philo *)current->content)->thread, NULL);
+		current = current->prev;
+		i--;
 	}
-	if (pthread_mutex_init(&common_data->eating_mutex, NULL))
-	{
-		pthread_mutex_destroy(&common_data->death_mutex);
-		pthread_mutex_destroy(&common_data->all_philo_is_ready);
-		pthread_mutex_destroy(&common_data->nb_philos_ready_mtx);
-		return (FALSE);
-	}
-	return (TRUE);
+	printf("Init philo thread or fork mutex error");
 }
 
-t_bool	create_manager(
-	pthread_t *manager_thread,
-	const t_data *data,
-	t_uint ph_meal_goal
+static t_bool	init_philos_and_forks(
+	t_philo_args *args,
+	t_node *current,
+	t_common_data *common_data,
+	t_uint *i
 )
 {
-	if (ph_meal_goal > 0)
+	t_philo	*ph;
+
+	while ((*i)++ < args->nb_philo)
 	{
-		if (pthread_create(manager_thread, NULL, manager, (void *)(data)))
+		ph = (t_philo *)current->content;
+		ph->data = common_data;
+		if (pthread_mutex_init(&ph->mtx_eat, NULL))
 			return (FALSE);
+		if (args->ph_meal_goal > 0 && pthread_create(&ph->thread, NULL,
+				(void *)ph_worker, (void *)current))
+			return (FALSE);
+		else if (args->ph_meal_goal == 0 && pthread_create(&ph->thread, NULL,
+				(void *)ph_worker_wt_limit, (void *)current))
+			return (FALSE);
+		current = current->next;
+		if (pthread_mutex_init(&((t_fork *)current->content)->mutex, NULL))
+			return (FALSE);
+		current = current->next;
 	}
-	else if (pthread_create(manager_thread, NULL, manager_wt_limit,
-			(void *)(data)))
-		return (FALSE);
 	return (TRUE);
 }
 
-void	destroy_all_common_mtx(t_common_data *common_data)
+static t_bool	join_philos(t_uint nb_philo, t_node *current)
 {
-	pthread_mutex_destroy(&common_data->death_mutex);
-	pthread_mutex_destroy(&common_data->all_philo_is_ready);
-	pthread_mutex_destroy(&common_data->nb_philos_ready_mtx);
-	pthread_mutex_destroy(&common_data->eating_mutex);
+	t_uint	i;
+	t_philo	*philo;
+
+	i = 0;
+	while (i++ < nb_philo)
+	{
+		philo = (t_philo *)current->content;
+		if (pthread_join(philo->thread, NULL))
+			return (TRUE);
+		current = current->next->next;
+	}
+	return (FALSE);
 }
 
 void	init_and_join(

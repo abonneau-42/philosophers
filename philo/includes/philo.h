@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:23:51 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:32:20 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,28 +209,11 @@ t_bool			ph_is_dead(t_philo *philo);
 void			ph_stop_all(t_common_data *data);
 void			ph_puts_forks(t_fork *l_fork, t_fork *r_fork);
 
-t_bool			join_philos(t_uint nb_philo, t_node *current);
-int				init_common_data(
-					t_philo_args *args,
-					t_common_data *common_data);
-t_bool			init_philos_and_forks(
-					t_philo_args *args,
-					t_node *current,
-					t_common_data *common_data,
-					t_uint *i);
-void			destroy_mtx_and_join_valid_ph(
-					t_uint i,
-					t_node *current);
 void			init_and_join(
 					t_philo_args *args,
 					t_node **node,
 					t_common_data *common_data,
 					pthread_t th_manager);
-t_bool			create_manager(
-					pthread_t *manager_thread,
-					const t_data *data,
-					t_uint ph_meal_goal);
-int				create_common_mutex(t_common_data *common_data);
 void			destroy_all_common_mtx(t_common_data *common_data);
 void			ph_prepare_worker(t_philo *const philo);
 
