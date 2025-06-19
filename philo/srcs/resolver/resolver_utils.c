@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:03:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:30:50 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:54:36 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	destroy_mtx_and_join_valid_ph(t_uint i, t_node *current)
 		current = current->prev;
 		i--;
 	}
-	printf("Init philo thread or fork mutex error");
+	printf("Init philo thread or fork mutex error\n");
 }
 
 static t_bool	init_philos_and_forks(
@@ -85,6 +85,7 @@ void	init_and_join(
 {
 	t_uint	i;
 
+	i = 0;
 	if (!init_philos_and_forks(args, *node, common_data, &i))
 	{
 		ph_stop_all(common_data);
