@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:03:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/19 18:54:36 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:50:29 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ static t_bool	init_philos_and_forks(
 )
 {
 	t_philo	*ph;
+	t_node	*next;
+	static int val;
+
+	val = 0;
 
 	while ((*i)++ < args->nb_philo)
 	{
@@ -46,16 +50,17 @@ static t_bool	init_philos_and_forks(
 		ph->data = common_data;
 		if (pthread_mutex_init(&ph->mtx_eat, NULL))
 			return (FALSE);
+		next = current->next;
+		if (pthread_mutex_init(&((t_fork *)next->content)->mutex, NULL))
+			return (FALSE);
 		if (args->ph_meal_goal > 0 && pthread_create(&ph->thread, NULL,
 				(void *)ph_worker, (void *)current))
 			return (FALSE);
-		else if (args->ph_meal_goal == 0 && pthread_create(&ph->thread, NULL,
-				(void *)ph_worker_wt_limit, (void *)current))
+		else if (args->ph_meal_goal == 0 && (val == 4 || pthread_create(&ph->thread, NULL,
+				(void *)ph_worker_wt_limit, (void *)current))) 
 			return (FALSE);
-		current = current->next;
-		if (pthread_mutex_init(&((t_fork *)current->content)->mutex, NULL))
-			return (FALSE);
-		current = current->next;
+		current = next->next;
+		val++;
 	}
 	return (TRUE);
 }
@@ -95,13 +100,14 @@ void	init_and_join(
 		if (pthread_join(th_manager, NULL))
 			return ;
 		destroy_mtx_and_join_valid_ph(i, *node);
-		destroy_all_common_mtx(common_data);
 	}
 	else
 	{
+		common_data->is_completed_init = TRUE;
 		if (pthread_join(th_manager, NULL))
 			return ;
 		if (join_philos(args->nb_philo, *node))
 			return ;
 	}
+	destroy_all_common_mtx(common_data);
 }

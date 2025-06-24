@@ -5,7 +5,7 @@ BUILD_DIR = .build
 INCLUDES_DIR = ./includes
 HEADER = philo.h
 
-CFLAGS = -Wall -Werror -Wextra -I $(INCLUDES_DIR)
+CFLAGS = -Wall -Werror -Wextra -I $(INCLUDES_DIR) -fsanitize=thread -g3
 INCLUDES_FILES = $(addprefix $(INCLUDES_DIR)/, $(HEADER))
 
 SRCS_DIR = srcs

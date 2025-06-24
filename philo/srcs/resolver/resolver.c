@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/19 18:54:11 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/24 14:35:28 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,12 @@ static t_bool	create_manager(
 	return (TRUE);
 }
 
-void	resolver(t_philo_args *args, t_node **node)
+void	resolver(t_philo_args *args, t_node **node, t_common_data *cdata)
 {
-	t_common_data	common_data;
-	const t_data	data = (t_data){.common_data = &common_data, .node = *node};
+	const t_data	data = (t_data){.common_data = cdata, .node = *node};
 	pthread_t		th_manager;
 
-	if (!init_common_data(args, &common_data))
+	if (!init_common_data(args, cdata))
 	{
 		printf("Init mutex error\n");
 		return ;
@@ -93,8 +92,8 @@ void	resolver(t_philo_args *args, t_node **node)
 	if (!create_manager(&th_manager, &data, args->ph_meal_goal))
 	{
 		printf("Init manager thread error\n");
-		destroy_all_common_mtx(&common_data);
+		destroy_all_common_mtx(cdata);
 		return ;
 	}
-	return (init_and_join(args, node, &common_data, th_manager));
+	return (init_and_join(args, node, cdata, th_manager));
 }
