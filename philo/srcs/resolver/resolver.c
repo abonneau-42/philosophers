@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:04:44 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/24 14:35:28 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:43:06 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,10 @@ void	resolver(t_philo_args *args, t_node **node, t_common_data *cdata)
 		printf("Init mutex error\n");
 		return ;
 	}
+	pthread_mutex_lock(&cdata->death_mutex);
 	if (!create_manager(&th_manager, &data, args->ph_meal_goal))
 	{
+		pthread_mutex_unlock(&cdata->death_mutex);
 		printf("Init manager thread error\n");
 		destroy_all_common_mtx(cdata);
 		return ;

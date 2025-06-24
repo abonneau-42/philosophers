@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:47:12 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:49:58 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	*manager(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
+	pthread_mutex_lock(&data->common_data->death_mutex);
+	pthread_mutex_unlock(&data->common_data->death_mutex);
 	wait_all_philo_is_ready(data);
 	while (!ph_get_dead(data->common_data))
 	{
@@ -71,6 +73,7 @@ void	*manager(void *arg)
 		}
 		usleep(data->common_data->max_duration);
 	}
+	printf("manager finish");
 	return (NULL);
 }
 
@@ -79,9 +82,12 @@ void	*manager_wt_limit(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
+	pthread_mutex_lock(&data->common_data->death_mutex);
+	pthread_mutex_unlock(&data->common_data->death_mutex);
 	wait_all_philo_is_ready(data);
 	while (!ph_get_dead(data->common_data))
 		usleep(data->common_data->max_duration);
 	ph_stop_all(data->common_data);
+	printf("manager finish");
 	return (NULL);
 }

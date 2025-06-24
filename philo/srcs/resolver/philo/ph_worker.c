@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:08:48 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/18 16:58:16 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:14:47 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	ph_worker(void *arg)
 		print_action(thinking, philo);
 	}
 	ph_puts_forks(l_fork, r_fork);
+	printf("finish i=%u\n", philo->id);
 }
 
 void	ph_worker_wt_limit(void *arg)
@@ -101,4 +102,5 @@ void	ph_worker_wt_limit(void *arg)
 		print_action(thinking, philo);
 	}
 	ph_puts_forks(l_fork, r_fork);
+	printf("finish i=%u\n", philo->id);
 }

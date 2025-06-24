@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:03:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/24 15:50:29 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/24 16:47:50 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static t_bool	join_philos(t_uint nb_philo, t_node *current)
 	return (FALSE);
 }
 
-void	init_and_join(
+inline void	init_and_join(
 	t_philo_args *args,
 	t_node **node,
 	t_common_data *common_data,
@@ -93,8 +93,8 @@ void	init_and_join(
 	i = 0;
 	if (!init_philos_and_forks(args, *node, common_data, &i))
 	{
-		ph_stop_all(common_data);
-		pthread_mutex_lock(&common_data->death_mutex);
+		common_data->args->nb_philo = i;
+		common_data->is_simulation_over = TRUE;
 		common_data->philo_is_dead = TRUE;
 		pthread_mutex_unlock(&common_data->death_mutex);
 		if (pthread_join(th_manager, NULL))
