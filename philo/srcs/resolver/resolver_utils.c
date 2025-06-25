@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:03:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/25 21:02:34 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:40:48 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,12 @@ t_bool	init_philo_mutexes(
 )
 {
 	t_uint	i;
-	t_philo	*ph;
 
 	i = 0;
 	while (i < nb_philo)
 	{
-		ph = (t_philo *)current->content;
-		ph->data = common_data;
-		if (pthread_mutex_init(&ph->mtx_eat, NULL))
+		((t_philo *)current->content)->data = common_data;
+		if (pthread_mutex_init(&((t_philo *)current->content)->mtx_eat, NULL))
 			break ;
 		current = current->next->next;
 		i++;
@@ -70,6 +68,7 @@ t_bool	init_philo_mutexes(
 			current = current->prev->prev;
 			i--;
 		}
+		destroy_mtx_fork(nb_philo, current->next);
 		return (FALSE);
 	}
 	return (TRUE);
@@ -77,7 +76,8 @@ t_bool	init_philo_mutexes(
 
 void	join_philos_threads(
 	t_node *current,
-	t_uint	size
+	t_uint	size,
+	t_uint	nb_philo
 )
 {
 	t_uint	i;
@@ -89,6 +89,8 @@ void	join_philos_threads(
 		current = current->next->next;
 		i++;
 	}
+	destroy_mtx_philo(nb_philo, current);
+	destroy_mtx_fork(nb_philo, current->next);
 }
 
 t_bool	start_philos_threads(
@@ -134,18 +136,17 @@ inline void	init_and_join(
 		|| !init_philo_mutexes(*node, common_data, args->nb_philo)
 		|| !start_philos_threads(*node, args, &count))
 	{
+		printf("Init error mutex or thread\n");
 		ph_stop_all(common_data);
 		common_data->philo_is_dead = TRUE;
-		if (pthread_join(th_manager, NULL))
-			return ;
-		join_philos_threads(*node, count);
+		pthread_join(th_manager, NULL);
+		join_philos_threads(*node, count, args->nb_philo);
 	}
 	else
 	{
 		common_data->is_completed_init = TRUE;
-		if (pthread_join(th_manager, NULL))
-			return ;
-		join_philos_threads(*node, count);
+		pthread_join(th_manager, NULL);
+		join_philos_threads(*node, count, args->nb_philo);
 	}
 	destroy_all_common_mtx(common_data);
 }

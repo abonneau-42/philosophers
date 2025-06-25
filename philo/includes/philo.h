@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/25 21:03:36 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:30:40 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,5 +218,8 @@ void			init_and_join(
 					pthread_t th_manager);
 void			destroy_all_common_mtx(t_common_data *common_data);
 void			ph_prepare_worker(t_philo *const philo);
+
+void			destroy_mtx_fork(t_uint nb_philo, t_node *current);
+void			destroy_mtx_philo(t_uint nb_philo, t_node *current);
 
 #endif

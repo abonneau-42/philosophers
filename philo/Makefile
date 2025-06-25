@@ -20,6 +20,7 @@ SRCS_FILES = 	main.c \
 				resolver/resolver.c \
 				resolver/resolver_utils.c \
 				resolver/print_action.c \
+				resolver/destroy_mtx.c \
 				resolver/philo/ph_worker.c \
 				resolver/philo/ph_worker_utils.c \
 				resolver/philo/ph_fk_actions.c \
