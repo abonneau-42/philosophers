@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 16:45:42 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/24 14:35:20 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:03:36 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,8 @@ int				get_args(const t_args args,
 
 int				parser(const t_args args, t_philo_args *philo_args);
 int				initialiser(t_philo_args *philo_args, t_node **node_list);
-void			resolver(t_philo_args *philo_args, t_node **node_list, t_common_data *cdata);
+void			resolver(t_philo_args *philo_args, t_node **node_list,
+					t_common_data *cdata);
 void			free_list(t_node **node_list, t_bool is_malloc_error);
 
 long			ft_atol(const char *nptr);

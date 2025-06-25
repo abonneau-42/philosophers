@@ -6,11 +6,21 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 23:45:04 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/24 16:49:58 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:00:27 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static t_bool	ph_is_over(t_common_data *data)
+{
+	t_bool	dead;
+
+	pthread_mutex_lock(&data->death_mutex);
+	dead = data->is_simulation_over;
+	pthread_mutex_unlock(&data->death_mutex);
+	return (dead);
+}
 
 static void	wait_all_philo_is_ready(t_data *data)
 {
@@ -21,6 +31,11 @@ static void	wait_all_philo_is_ready(t_data *data)
 	pthread_mutex_lock(&data->common_data->all_philo_is_ready);
 	while (i < data->common_data->args->nb_philo)
 	{
+		if (ph_is_over(data->common_data))
+		{
+			pthread_mutex_unlock(&data->common_data->all_philo_is_ready);
+			return ;
+		}
 		pthread_mutex_lock(&data->common_data->nb_philos_ready_mtx);
 		nb_philos_ready = data->common_data->nb_philos_ready;
 		pthread_mutex_unlock(&data->common_data->nb_philos_ready_mtx);
@@ -60,20 +75,17 @@ void	*manager(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
-	pthread_mutex_lock(&data->common_data->death_mutex);
-	pthread_mutex_unlock(&data->common_data->death_mutex);
 	wait_all_philo_is_ready(data);
+	if (ph_is_over(data->common_data))
+		return (NULL);
 	while (!ph_get_dead(data->common_data))
 	{
 		if (get_count(data->node, data->common_data->args->nb_philo,
 				data->node->content))
-		{
-			ph_stop_all(data->common_data);
 			break ;
-		}
 		usleep(data->common_data->max_duration);
 	}
-	printf("manager finish");
+	ph_stop_all(data->common_data);
 	return (NULL);
 }
 
@@ -82,12 +94,11 @@ void	*manager_wt_limit(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
-	pthread_mutex_lock(&data->common_data->death_mutex);
-	pthread_mutex_unlock(&data->common_data->death_mutex);
 	wait_all_philo_is_ready(data);
+	if (ph_is_over(data->common_data))
+		return (NULL);
 	while (!ph_get_dead(data->common_data))
 		usleep(data->common_data->max_duration);
 	ph_stop_all(data->common_data);
-	printf("manager finish");
 	return (NULL);
 }

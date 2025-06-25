@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 17:57:10 by abonneau          #+#    #+#             */
-/*   Updated: 2025/02/25 16:31:24 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:55:48 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	is_unsigned_int(const char *chr, void *number)
 	if (!*chr || !is_number(chr) || ft_strlen(chr) > 11)
 		return (0);
 	value = ft_atol(chr);
-	if (value < 0 || value > UINT_MAX)
+	if (value <= 0 || value > UINT_MAX)
 		return (0);
 	*(unsigned int *)number = (unsigned int)value;
 	return (1);
