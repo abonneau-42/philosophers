@@ -6,7 +6,7 @@
 /*   By: abonneau <abonneau@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/08 21:46:32 by abonneau          #+#    #+#             */
-/*   Updated: 2025/06/17 04:28:00 by abonneau         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:26:54 by abonneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static __uint64_t	compute_deadline(__uint64_t duration, t_philo *philo)
 	const __uint64_t	ts_dead = philo->lts_eat + philo->data->args->lifetime;
 
 	if (ts_dead < ts_end)
-		return (ts_dead);
-	return (ts_end);
+		return (ts_dead + 1);
+	return (ts_end + 1);
 }
 
 void	ph_sleep(__uint64_t duration, t_philo *philo)
